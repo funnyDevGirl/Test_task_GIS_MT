@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
-
 @Getter
 public class CrptApi {
 
@@ -20,13 +19,9 @@ public class CrptApi {
      * Accepts a time interval and a limit on the number of requests.
      * Initializes the fields and sets the start time of the last request.
      */
-    //проверяемый отрезок времени
     private final TimeUnit timeUnit;
-    //кол-во запросов за отрезок времени timeUnit
     private final int requestLimit;
-    // отслеживает текущее количество запросов:
     private int currentRequests;
-    // сохраняет время последнего запроса
     private long lastRequestTime;
 
 
@@ -48,11 +43,13 @@ public class CrptApi {
      */
     @Synchronized
     public void createProductDocument(Document document, String signature) throws InterruptedException {
+
         // время текущего запроса:
         long currentTime = System.currentTimeMillis();
 
         // проверяем, что мы ещё находимся в заданном отрезке:
         if (currentTime - lastRequestTime < timeUnit.toMillis(1)) {
+
             // если кол-во запросов превышено, то засыпаем на sleepTime,
             // обновляем время последнего запроса, когда просыпаемся,
             // устанавниваем счетчику запросов 1:
@@ -61,6 +58,7 @@ public class CrptApi {
                 Thread.sleep(sleepTime);
                 lastRequestTime = System.currentTimeMillis();
                 currentRequests = 1;
+
             //если кол-во ещё не превышено, то добавляем 1 запрос:
             } else {
 
@@ -68,6 +66,7 @@ public class CrptApi {
 
                 currentRequests++;
             }
+
         // если отрезок времени уже превышен, но обновляем время последнего запроса
         // и устанавливаем счетчику запросов 1:
         } else {
@@ -77,7 +76,6 @@ public class CrptApi {
 
         System.out.println("Product document created successfully with code №: " + document.hashCode());
     }
-
 
 
     @Entity
