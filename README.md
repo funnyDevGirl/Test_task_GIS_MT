@@ -2,7 +2,7 @@
 ### It is necessary to implement a class in Java (version 11+) to work with the Fair Sign API. The class must be thread-safe and support a limit on the number of API requests. The limit is specified in the constructor in the form of the number of requests in a certain time interval.
 
 ### For example:
-### public CrptApi(TimeUnit TimeUnit, int requestLimit),
+```public CrptApi(TimeUnit TimeUnit, int requestLimit)```
 ### TimeUnit – specifies the time interval – second, minute, etc,
 ### requestLimit is a positive value that determines the maximum number of requests in this time interval.
 ### If the limit is exceeded, the request must be blocked in order not to exceed the maximum number of API requests and continue execution when the limit is not exceeded.
